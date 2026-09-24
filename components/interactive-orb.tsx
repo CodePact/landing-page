@@ -69,21 +69,61 @@ export function InteractiveOrb() {
       vertexShader: `
         varying vec3 vObjectNormal;
         varying vec3 vSurfacePosition;
+        varying float vRidge;
 
         uniform float uTime;
 
+        float hash(vec3 point) {
+          return fract(sin(dot(point, vec3(127.1, 311.7, 74.7))) * 43758.5453123);
+        }
+
+        float noise(vec3 point) {
+          vec3 cell = floor(point);
+          vec3 local = fract(point);
+          vec3 smoothLocal = local * local * (3.0 - 2.0 * local);
+
+          return mix(
+            mix(
+              mix(hash(cell), hash(cell + vec3(1.0, 0.0, 0.0)), smoothLocal.x),
+              mix(hash(cell + vec3(0.0, 1.0, 0.0)), hash(cell + vec3(1.0, 1.0, 0.0)), smoothLocal.x),
+              smoothLocal.y
+            ),
+            mix(
+              mix(hash(cell + vec3(0.0, 0.0, 1.0)), hash(cell + vec3(1.0, 0.0, 1.0)), smoothLocal.x),
+              mix(hash(cell + vec3(0.0, 1.0, 1.0)), hash(cell + vec3(1.0, 1.0, 1.0)), smoothLocal.x),
+              smoothLocal.y
+            ),
+            smoothLocal.z
+          );
+        }
+
+        float fbm(vec3 point) {
+          float value = 0.0;
+          float amplitude = 0.5;
+
+          for (int octave = 0; octave < 3; octave++) {
+            value += noise(point) * amplitude;
+            point = point * 2.03 + vec3(17.1, 31.7, 11.9);
+            amplitude *= 0.5;
+          }
+
+          return value;
+        }
+
         void main() {
           vec3 direction = normalize(position);
-          float waveA = sin(position.x * 3.7 + uTime * 0.72);
-          float waveB = sin(position.y * 5.1 - uTime * 0.58);
-          float waveC = sin(position.z * 4.3 + uTime * 0.91);
-          float waveD = sin((position.x + position.z) * 6.0 - uTime * 0.43);
+          vec3 drift = vec3(uTime * 0.045, -uTime * 0.03, uTime * 0.025);
+          float macroShape = fbm(position * 1.8 + drift) - 0.45;
+          float broadRidge = 1.0 - abs(fbm(position * 5.2 - drift) * 2.0 - 1.0);
+          float fineRidge = 1.0 - abs(fbm(position * 10.0 + drift * 1.6) * 2.0 - 1.0);
+          float ridgeMask = broadRidge * 0.72 + fineRidge * 0.28;
           float displacement =
-            (waveA * waveB * 0.55 + waveC * 0.3 + waveD * 0.15) * 0.018;
+            macroShape * 0.095 + broadRidge * 0.062 + fineRidge * 0.024 - 0.053;
           vec3 displacedPosition = position + direction * displacement;
 
-          vObjectNormal = normalize(normal + direction * displacement * 0.45);
+          vObjectNormal = normalize(normal + direction * ridgeMask * 0.14);
           vSurfacePosition = displacedPosition;
+          vRidge = ridgeMask;
 
           gl_Position =
             projectionMatrix *
@@ -98,6 +138,7 @@ export function InteractiveOrb() {
 
         varying vec3 vObjectNormal;
         varying vec3 vSurfacePosition;
+        varying float vRidge;
 
         void main() {
           vec3 normal = normalize(vObjectNormal);
@@ -125,8 +166,8 @@ export function InteractiveOrb() {
             );
 
           vec2 textureDistortion = vec2(
-            sin(vSurfacePosition.y * 5.0 + vSurfacePosition.z * 2.0 + uTime * 0.62) * 0.006,
-            sin(vSurfacePosition.x * 4.0 - vSurfacePosition.z * 3.0 - uTime * 0.48) * 0.006
+            sin(vSurfacePosition.y * 5.0 + vSurfacePosition.z * 2.0 + uTime * 0.62) * 0.012,
+            sin(vSurfacePosition.x * 4.0 - vSurfacePosition.z * 3.0 - uTime * 0.48) * 0.012
           );
 
           textureUV += textureDistortion;
@@ -140,7 +181,9 @@ export function InteractiveOrb() {
           float backLight =
             normal.z * 0.15 + 0.85;
 
-          color.rgb *= backLight;
+          float ridgeLight = mix(0.64, 1.22, vRidge);
+
+          color.rgb *= backLight * ridgeLight;
 
           gl_FragColor = color;
         }
