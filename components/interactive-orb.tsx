@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export function InteractiveOrb() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -54,7 +53,7 @@ export function InteractiveOrb() {
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
 
-    const geometry = new THREE.SphereGeometry(1.4, 128, 128);
+    const geometry = new THREE.SphereGeometry(1, 128, 128);
 
     const material = new THREE.ShaderMaterial({
       uniforms: {
@@ -243,9 +242,9 @@ export function InteractiveOrb() {
 
     const cometGeometry = new THREE.SphereGeometry(0.026, 12, 12);
     const cometConfigurations = [
-      { radius: 1.58, speed: 0.48, phase: 2.0, tiltX: 0.05, tiltZ: 0.2 },
-      { radius: 1.54, speed: 0.46, phase: 3.8, tiltX: 0.18, tiltZ: 0.75 },
-      { radius: 1.56, speed: -0.58, phase: 1.9, tiltX: -0.6, tiltZ: -0.35 },
+      { radius: 1.08, speed: 0.48, phase: 2.0, tiltX: 0.05, tiltZ: 0.2 },
+      { radius: 1.1, speed: 0.46, phase: 3.8, tiltX: 0.18, tiltZ: 0.75 },
+      { radius: 1.06, speed: -0.58, phase: 1.9, tiltX: -0.6, tiltZ: -0.35 },
     ];
 
     const comets = cometConfigurations.map((configuration, index) => {
@@ -256,12 +255,15 @@ export function InteractiveOrb() {
         color: index % 2 === 0 ? 0x6ee7ff : 0xb3d4ff,
         transparent: true,
         opacity: 0.95,
-        blending: THREE.AdditiveBlending,
+        blending: THREE.CustomBlending,
+        blendSrc: THREE.SrcAlphaFactor,
+        blendDst: THREE.OneMinusSrcAlphaFactor,
+        blendEquation: THREE.AddEquation,
         depthWrite: false,
       });
       const comet = new THREE.Mesh(cometGeometry, cometMaterial);
 
-      const trailPositions = new Float32Array(22 * 3);
+      const trailPositions = new Float32Array(32 * 3);
       const trailGeometry = new THREE.BufferGeometry();
       const trailAttribute = new THREE.BufferAttribute(trailPositions, 3);
       trailGeometry.setAttribute("position", trailAttribute);
@@ -269,7 +271,7 @@ export function InteractiveOrb() {
       const trailMaterial = new THREE.LineBasicMaterial({
         color: index % 2 === 0 ? 0x42bfff : 0x8db7ff,
         transparent: true,
-        opacity: 0.2,
+        opacity: 0.075,
         blending: THREE.CustomBlending,
         blendSrc: THREE.SrcAlphaFactor,
         blendDst: THREE.OneMinusSrcAlphaFactor,
@@ -292,18 +294,6 @@ export function InteractiveOrb() {
         trailAttribute,
       };
     });
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-
-    controls.enablePan = false;
-
-    controls.minDistance = 5;
-    controls.maxDistance = 6;
-
-    controls.enableZoom = false;
 
     let animationFrameId: number;
     const timer = new THREE.Timer();
@@ -350,8 +340,6 @@ export function InteractiveOrb() {
 
       glow.rotation.copy(sphere.rotation);
 
-      controls.update();
-
       renderer.render(scene, camera);
     };
 
@@ -375,8 +363,6 @@ export function InteractiveOrb() {
       cancelAnimationFrame(animationFrameId);
 
       resizeObserver.disconnect();
-
-      controls.dispose();
 
       geometry.dispose();
       material.dispose();
