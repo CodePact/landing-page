@@ -26,8 +26,8 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border">
       <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid gap-12 lg:grid-cols-[1.5fr_2fr]">
-          <div>
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr]">
+          <div className="max-w-xs">
             <a href="#" className="flex items-center gap-2.5">
               <img
                 src="/logo.png"
@@ -38,13 +38,46 @@ export function SiteFooter() {
                 Code<span className="text-muted-foreground">Pact</span>
               </span>
             </a>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               Software escalável e confiável para negócios ambiciosos.
               Engenharia de ponta a ponta.
             </p>
-            <div className="mt-6 space-y-1 text-sm text-muted-foreground">
-              <p>contato@codepact.com.br</p>
+          </div>
+
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h3 className="text-sm font-semibold text-foreground">
+                {col.title}
+              </h3>
+              <ul className="mt-4 space-y-3">
+                {col.links.map((link) => (
+                  <li key={link}>
+                    <a
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
+          ))}
+
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">Contato</h3>
+            <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+              <li>
+                <a
+                  href="mailto:contato@codepact.com.br"
+                  className="transition-colors hover:text-foreground"
+                >
+                  contato@codepact.com.br
+                </a>
+              </li>
+            </ul>
             <div className="mt-6 flex gap-2">
               {socials.map((s) => (
                 <a
@@ -57,30 +90,6 @@ export function SiteFooter() {
                 </a>
               ))}
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-            {columns.map((col) => (
-              <div key={col.title}>
-                <h3 className="text-sm font-semibold text-foreground">
-                  {col.title}
-                </h3>
-                <ul className="mt-4 space-y-3">
-                  {col.links.map((link) => (
-                    <li key={link}>
-                      <a
-                        href={link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {link}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
           </div>
         </div>
 

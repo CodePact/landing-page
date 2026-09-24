@@ -245,9 +245,7 @@ export function InteractiveOrb() {
     const cometConfigurations = [
       { radius: 1.58, speed: 0.48, phase: 2.0, tiltX: 0.05, tiltZ: 0.2 },
       { radius: 1.54, speed: 0.46, phase: 3.8, tiltX: 0.18, tiltZ: 0.75 },
-      // { radius: 1.56, speed: -0.58, phase: 1.9, tiltX: -0.6, tiltZ: -0.35 },
-      // { radius: 1.88, speed: -0.69, phase: 5.1, tiltX: 0.82, tiltZ: -0.12 },
-      // { radius: 1.84, speed: 0.36, phase: 2.8, tiltX: -0.25, tiltZ: 0.52 },
+      { radius: 1.56, speed: -0.58, phase: 1.9, tiltX: -0.6, tiltZ: -0.35 },
     ];
 
     const comets = cometConfigurations.map((configuration, index) => {
