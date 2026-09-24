@@ -15,24 +15,33 @@ const projects: Project[] = [
     name: "Fluxusmed AI",
     description:
       "Projeto de inteligência artificial para otimização de processos médicos. Sendo o primeiro do gênero no mercado.",
-    tech: ["React", "TypeScript", "Terraform", "Python", "Docker", "FastAPI"],
+    tech: [
+      "React",
+      "TypeScript",
+      "Terraform",
+      "Python",
+      "Docker",
+      "FastAPI",
+      "MongoDB",
+      "GCP",
+    ],
     impact: "+90% de precisão nos diagnósticos médicos.",
   },
   {
-    image: "/project-logistics.png",
-    name: "Atlas Logistics — Supply Chain",
+    image: "/eclasse.png",
+    name: "eClasse — Sistema Educacional",
     description:
-      "Sistema de rastreamento e otimização de rotas com pipelines de dados integrados a múltiplas transportadoras.",
-    tech: ["React", "TypeScript", "Docker", "MongoDB"],
-    impact: "Redução de 28% nos custos de entrega no primeiro ano.",
-  },
-  {
-    image: "/project-health.png",
-    name: "Helix Health — Sistema Corporativo",
-    description:
-      "Plataforma de gestão clínica integrada com prontuários, agendamentos e analytics de operação.",
-    tech: ["Next.js", "Node.js", "PostgreSQL", "AWS"],
-    impact: "Atendimentos 35% mais ágeis e zero downtime em produção.",
+      "Plataforma de gestão educacional integrada com turmas, agendamentos e analytics de desempenho.",
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "MongoDB",
+      "FastAPI",
+      "Docker",
+      "Python",
+    ],
+    impact: "Aplicação bem-sucedida em diversas instituições educacionais.",
   },
 ];
 
