@@ -241,6 +241,60 @@ export function InteractiveOrb() {
 
     scene.add(glow);
 
+    const cometGeometry = new THREE.SphereGeometry(0.026, 12, 12);
+    const cometConfigurations = [
+      { radius: 1.58, speed: 0.48, phase: 2.0, tiltX: 0.05, tiltZ: 0.2 },
+      { radius: 1.54, speed: 0.46, phase: 3.8, tiltX: 0.18, tiltZ: 0.75 },
+      // { radius: 1.56, speed: -0.58, phase: 1.9, tiltX: -0.6, tiltZ: -0.35 },
+      // { radius: 1.88, speed: -0.69, phase: 5.1, tiltX: 0.82, tiltZ: -0.12 },
+      // { radius: 1.84, speed: 0.36, phase: 2.8, tiltX: -0.25, tiltZ: 0.52 },
+    ];
+
+    const comets = cometConfigurations.map((configuration, index) => {
+      const orbit = new THREE.Group();
+      orbit.rotation.set(configuration.tiltX, 0, configuration.tiltZ);
+
+      const cometMaterial = new THREE.MeshBasicMaterial({
+        color: index % 2 === 0 ? 0x6ee7ff : 0xb3d4ff,
+        transparent: true,
+        opacity: 0.95,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const comet = new THREE.Mesh(cometGeometry, cometMaterial);
+
+      const trailPositions = new Float32Array(22 * 3);
+      const trailGeometry = new THREE.BufferGeometry();
+      const trailAttribute = new THREE.BufferAttribute(trailPositions, 3);
+      trailGeometry.setAttribute("position", trailAttribute);
+
+      const trailMaterial = new THREE.LineBasicMaterial({
+        color: index % 2 === 0 ? 0x42bfff : 0x8db7ff,
+        transparent: true,
+        opacity: 0.2,
+        blending: THREE.CustomBlending,
+        blendSrc: THREE.SrcAlphaFactor,
+        blendDst: THREE.OneMinusSrcAlphaFactor,
+        blendEquation: THREE.AddEquation,
+        depthWrite: false,
+      });
+      const trail = new THREE.Line(trailGeometry, trailMaterial);
+
+      orbit.add(trail, comet);
+      scene.add(orbit);
+
+      return {
+        ...configuration,
+        orbit,
+        comet,
+        cometMaterial,
+        trail,
+        trailGeometry,
+        trailMaterial,
+        trailAttribute,
+      };
+    });
+
     const controls = new OrbitControls(camera, renderer.domElement);
 
     controls.enableDamping = true;
@@ -263,6 +317,35 @@ export function InteractiveOrb() {
       timer.update();
 
       material.uniforms.uTime.value = timer.getElapsed();
+
+      const elapsed = timer.getElapsed();
+
+      comets.forEach((comet) => {
+        for (
+          let segment = 0;
+          segment < comet.trailAttribute.count;
+          segment += 1
+        ) {
+          const angle =
+            elapsed * comet.speed +
+            comet.phase -
+            segment * 0.095 * Math.sign(comet.speed);
+          const offset = segment * 3;
+
+          comet.trailAttribute.array[offset] = Math.cos(angle) * comet.radius;
+          comet.trailAttribute.array[offset + 1] =
+            Math.sin(angle) * comet.radius * 0.42;
+          comet.trailAttribute.array[offset + 2] =
+            Math.sin(angle) * comet.radius;
+        }
+
+        comet.trailAttribute.needsUpdate = true;
+        comet.comet.position.set(
+          comet.trailAttribute.array[0],
+          comet.trailAttribute.array[1],
+          comet.trailAttribute.array[2],
+        );
+      });
 
       sphere.rotation.y += 0.0015;
       sphere.rotation.x += 0.0003;
@@ -302,6 +385,13 @@ export function InteractiveOrb() {
 
       glowGeometry.dispose();
       glowMaterial.dispose();
+
+      cometGeometry.dispose();
+      comets.forEach((comet) => {
+        comet.cometMaterial.dispose();
+        comet.trailGeometry.dispose();
+        comet.trailMaterial.dispose();
+      });
 
       texture.dispose();
 

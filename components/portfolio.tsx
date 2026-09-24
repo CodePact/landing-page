@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 
 type Project = {
   image: string;
@@ -40,14 +40,12 @@ export function Portfolio() {
   return (
     <section id="projetos" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <span className="text-sm font-medium text-accent">Projetos</span>
-            <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              Resultados que falam por si
-            </h2>
-          </div>
-          <p className="max-w-md text-pretty leading-relaxed text-muted-foreground">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="text-sm font-medium text-accent">Projetos</span>
+          <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            Resultados que falam por si
+          </h2>
+          <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
             Uma seleção de produtos que projetamos, construímos e escalamos
             junto aos nossos clientes.
           </p>
@@ -60,7 +58,7 @@ export function Portfolio() {
               className="group grid items-center gap-8 overflow-hidden rounded-3xl border border-border bg-card p-6 transition-colors hover:border-primary/30 md:p-8 lg:grid-cols-2"
             >
               <div className={i % 2 === 1 ? "lg:order-2" : ""}>
-                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-border">
+                <div className="relative aspect-16/10 overflow-hidden rounded-2xl border border-border">
                   <Image
                     src={p.image || "/placeholder.svg"}
                     alt={`Interface do projeto ${p.name}`}

@@ -1,4 +1,4 @@
-import { AtSign, Link2, Globe } from "lucide-react";
+import { AtSign, Globe, Link2 } from "lucide-react";
 
 const columns = [
   {
@@ -13,9 +13,13 @@ const columns = [
 ];
 
 const socials = [
-  { icon: Globe, label: "Website", href: "#" },
-  { icon: Link2, label: "LinkedIn", href: "#" },
-  { icon: AtSign, label: "Contato", href: "#" },
+  { icon: Globe, label: "Website", href: "https://codepact.com.br" },
+  {
+    icon: Link2,
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/codepact-dev",
+  },
+  { icon: AtSign, label: "Contato", href: "mailto:contato@codepact.com.br" },
 ];
 
 export function SiteFooter() {
@@ -25,21 +29,11 @@ export function SiteFooter() {
         <div className="grid gap-12 lg:grid-cols-[1.5fr_2fr]">
           <div>
             <a href="#" className="flex items-center gap-2.5">
-              <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="m8 6-6 6 6 6" />
-                  <path d="m16 6 6 6-6 6" />
-                </svg>
-              </span>
+              <img
+                src="/logo.png"
+                alt="CodePact Logo"
+                className="size-8 rounded-md pr"
+              />
               <span className="text-lg font-semibold tracking-tight text-foreground">
                 Code<span className="text-muted-foreground">Pact</span>
               </span>
@@ -49,9 +43,7 @@ export function SiteFooter() {
               Engenharia de ponta a ponta.
             </p>
             <div className="mt-6 space-y-1 text-sm text-muted-foreground">
-              <p>contato@codepact.dev</p>
-              <p>+55 11 4000-0000</p>
-              <p>São Paulo, Brasil</p>
+              <p>contato@codepact.com.br</p>
             </div>
             <div className="mt-6 flex gap-2">
               {socials.map((s) => (
@@ -77,7 +69,9 @@ export function SiteFooter() {
                   {col.links.map((link) => (
                     <li key={link}>
                       <a
-                        href="#"
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link}

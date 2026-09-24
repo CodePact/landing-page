@@ -1,4 +1,11 @@
-const clients = ["NovaBank", "Atlas Logistics", "Helix Health", "Quantum Retail", "Vela Energy", "Orbit Media"]
+const clients = [
+  "NovaBank",
+  "Atlas Logistics",
+  "Helix Health",
+  "Quantum Retail",
+  "Vela Energy",
+  "Orbit Media",
+];
 
 export function LogoCloud() {
   return (
@@ -19,5 +26,5 @@ export function LogoCloud() {
         </div>
       </div>
     </section>
-  )
+  );
 }

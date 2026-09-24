@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { ArrowRight, Play } from "lucide-react";
+
 import { InteractiveOrb } from "./interactive-orb";
 
 export function Hero() {
@@ -51,7 +51,6 @@ export function Hero() {
 
             <dl className="mt-12 grid max-w-md grid-cols-3 gap-6">
               {[
-                { v: "120+", l: "Projetos entregues" },
                 { v: "99.9%", l: "Uptime médio" },
                 { v: "8 anos", l: "De experiência" },
               ].map((s) => (

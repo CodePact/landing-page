@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -43,7 +44,7 @@ export function SiteHeader() {
             <img
               src="/logo.png"
               alt="CodePact Logo"
-              className="size-8 rounded-sm pr"
+              className="size-8 rounded-md pr"
             />
             <span className="text-lg font-semibold tracking-tight text-foreground">
               Code<span className="text-muted-foreground">Pact</span>

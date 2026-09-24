@@ -1,11 +1,11 @@
 import {
-  Layers,
-  Gauge,
-  TrendingUp,
-  ShieldCheck,
-  Rocket,
   Code2,
+  Gauge,
+  Layers,
   type LucideIcon,
+  Rocket,
+  ShieldCheck,
+  TrendingUp,
 } from "lucide-react"
 
 type Reason = {
