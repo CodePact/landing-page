@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="540" height="150" viewBox="0 0 540 150">
+  <title>eclasse-logo.svg</title>
+  <g id="symbol">
+    <path d="M48 0 L102 0 C128.51 0 150 21.49 150 48 L150 102 C150 128.51 128.51 150 102 150 L48 150 C-8.922 150 0 157.978 0 102 L0 48 C0 21.49 21.49 0 48 0 Z" fill="#7467aa"/>
+    <text transform="matrix(1 0 0 1 73.391 126.979)" x="0" y="0" xml:space="preserve" font-family="Montserrat, sans-serif" font-size="115" font-weight="bold" fill="#ffffff" letter-spacing="-6.389" text-anchor="middle"><tspan x="0" y="0">e</tspan></text>
+  </g>
+  <g id="wordmark">
+    <text transform="matrix(1 0 0 1 161 112)" x="0" y="0" xml:space="preserve" font-family="Montserrat, sans-serif" font-size="115" font-weight="bold" fill="#27293d" letter-spacing="-7.188"><tspan x="0" y="0">classe</tspan></text>
+    <path d="M512.289 99.251 C512.289 106.707 506.245 112.751 498.789 112.751 C491.333 112.751 485.289 106.707 485.289 99.251 C485.289 91.795 491.333 85.751 498.789 85.751 C506.245 85.751 512.289 91.795 512.289 99.251 Z" fill="#7467aa"/>
+  </g>
+</svg>
