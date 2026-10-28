@@ -127,6 +127,8 @@ export function Portfolio() {
               <a
                 key={p.name}
                 href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={`Acessar o projeto ${p.name}`}
                 className="group block rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
               >

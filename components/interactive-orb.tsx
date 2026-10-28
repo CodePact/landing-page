@@ -298,15 +298,101 @@ export function InteractiveOrb() {
     let animationFrameId: number;
     const timer = new THREE.Timer();
     timer.connect(document);
+    const motionPreference = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+    let reduceMotion = motionPreference.matches;
+    let pausedElapsed = 0;
+    let activePointer: number | null = null;
+    let startX = 0;
+    let startY = 0;
+    let lastX = 0;
+    let elapsedOffset = 0;
+    let dragAxis: "horizontal" | "vertical" | null = null;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (
+        !event.isPrimary ||
+        (event.pointerType === "mouse" && event.button !== 0)
+      ) {
+        return;
+      }
+
+      activePointer = event.pointerId;
+      startX = lastX = event.clientX;
+      startY = event.clientY;
+      dragAxis = null;
+      container.setPointerCapture(event.pointerId);
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (event.pointerId !== activePointer) {
+        return;
+      }
+
+      const deltaX = event.clientX - startX;
+      const deltaY = event.clientY - startY;
+      const axisUndecided = dragAxis === null;
+
+      if (!dragAxis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) >= 6) {
+        dragAxis =
+          Math.abs(deltaX) > Math.abs(deltaY) ? "horizontal" : "vertical";
+      }
+
+      if (dragAxis === "horizontal") {
+        sphere.rotation.y +=
+          ((axisUndecided ? deltaX : event.clientX - lastX) /
+            container.clientWidth) *
+          Math.PI;
+      }
+
+      lastX = event.clientX;
+    };
+
+    const finishPointer = (event: PointerEvent) => {
+      if (event.pointerId !== activePointer) {
+        return;
+      }
+
+      activePointer = null;
+      dragAxis = null;
+      if (container.hasPointerCapture(event.pointerId)) {
+        container.releasePointerCapture(event.pointerId);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault();
+        sphere.rotation.y += event.key === "ArrowRight" ? 0.2 : -0.2;
+      }
+    };
+
+    const handleMotionPreferenceChange = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        pausedElapsed = timer.getElapsed() + elapsedOffset;
+      } else {
+        elapsedOffset = pausedElapsed - timer.getElapsed();
+      }
+      reduceMotion = event.matches;
+    };
+
+    container.addEventListener("pointerdown", handlePointerDown);
+    container.addEventListener("pointermove", handlePointerMove);
+    container.addEventListener("pointerup", finishPointer);
+    container.addEventListener("pointercancel", finishPointer);
+    container.addEventListener("keydown", handleKeyDown);
+    motionPreference.addEventListener("change", handleMotionPreferenceChange);
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
       timer.update();
 
-      material.uniforms.uTime.value = timer.getElapsed();
-
-      const elapsed = timer.getElapsed();
+      const elapsed = reduceMotion
+        ? pausedElapsed
+        : timer.getElapsed() + elapsedOffset;
+      material.uniforms.uTime.value = elapsed;
 
       comets.forEach((comet) => {
         for (
@@ -335,8 +421,10 @@ export function InteractiveOrb() {
         );
       });
 
-      sphere.rotation.y += 0.0015;
-      sphere.rotation.x += 0.0003;
+      if (!reduceMotion && activePointer === null) {
+        sphere.rotation.y += 0.0015;
+        sphere.rotation.x += 0.0003;
+      }
 
       glow.rotation.copy(sphere.rotation);
 
@@ -364,6 +452,16 @@ export function InteractiveOrb() {
 
       resizeObserver.disconnect();
 
+      container.removeEventListener("pointerdown", handlePointerDown);
+      container.removeEventListener("pointermove", handlePointerMove);
+      container.removeEventListener("pointerup", finishPointer);
+      container.removeEventListener("pointercancel", finishPointer);
+      container.removeEventListener("keydown", handleKeyDown);
+      motionPreference.removeEventListener(
+        "change",
+        handleMotionPreferenceChange,
+      );
+
       geometry.dispose();
       material.dispose();
 
@@ -385,5 +483,13 @@ export function InteractiveOrb() {
     };
   }, []);
 
-  return <div ref={containerRef} className="interactive-orb" />;
+  return (
+    <div
+      ref={containerRef}
+      className="interactive-orb"
+      role="group"
+      tabIndex={0}
+      aria-label="Esfera interativa. Arraste na horizontal ou use as setas esquerda e direita para girar."
+    />
+  );
 }

@@ -252,6 +252,17 @@
   min-height: 500px;
 
   position: relative;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.interactive-orb:active {
+  cursor: grabbing;
+}
+
+.interactive-orb:focus-visible {
+  outline: 2px solid rgba(110, 231, 255, 0.8);
+  outline-offset: -2px;
 }
 
 .interactive-orb canvas {
