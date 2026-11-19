@@ -21,10 +21,18 @@ export function FinalCta() {
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
                 href="mailto:contato@codepact.com.br"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
               >
-                Falar com a equipe
+                Enviar E-mail
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+              <a
+                href="https://wa.me/5517996272605?text=Ol%C3%A1%21%20Gostaria%20de%20saber%20mais%20sobre%20como%20contratar%20seus%20servi%C3%A7os."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-xl border border-border glass px-7 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+              >
+                Falar pelo WhatsApp
               </a>
               <a
                 href="#projetos"
